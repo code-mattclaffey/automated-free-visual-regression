@@ -1,0 +1,14 @@
+name: "CI/CD Main"
+
+permissions:
+  contents: "read"
+  id-token: "write"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  storybook-visual-chromium:
+    uses: ./.github/workflows/playwright.yml

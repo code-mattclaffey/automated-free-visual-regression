@@ -1,0 +1,37 @@
+{
+  "name": "@mattclaffey/automate-free-visual-regression",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/code-mattclaffey/automated-free-visual-regression#readme",
+  "bugs": {
+    "url": "https://github.com/code-mattclaffey/automated-free-visual-regression/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://@github.com/code-mattclaffey/automated-free-visual-regression.git"
+  },
+  "license": "MIT",
+  "author": "Matthew Claffey",
+  "main": "",
+  "scripts": {
+    "e2e:ui": "npx playwright test --ui",
+    "e2e:update": "npx playwright test --update-snapshots",
+    "start": "storybook dev -p 6006",
+    "build": "storybook build"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.1.1",
+    "@tailwindcss/postcss": "^4",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.11",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "storybook": "^10.5.3",
+    "@storybook/nextjs-vite": "^10.5.3",
+    "vite": "^8.1.5",
+    "eslint-plugin-storybook": "^10.5.3"
+  }
+}

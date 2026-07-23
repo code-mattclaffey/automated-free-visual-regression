@@ -1,0 +1,19 @@
+name: "CI/CD PR checks"
+permissions:
+  contents: "write" # Needed for storybook tests to commit snapshot updates
+  id-token: "write"
+  issues: "write"
+  pull-requests: "write"
+  statuses: "write"
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+concurrency:
+  group: feature-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  storybook-visual-chromium:
+    uses: ./.github/workflows/playwright.yml
