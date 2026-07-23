@@ -2,6 +2,9 @@ name: "E2E Regression Tests Workflow"
 
 on:
   workflow_call:
+    secrets:
+      PAT_TOKEN:
+        required: false
 
 jobs:
   e2e:
@@ -13,6 +16,10 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          persist-credentials: false
 
       - name: Cache dependencies
         uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
@@ -27,7 +34,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Install dependencies
         run: npm ci
@@ -52,7 +59,19 @@ jobs:
         run: |
           node .github/scripts/post-pr-comment.js
         env:
-          PAT_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+
+      - name: Commit updated snapshots
+        if: github.event_name == 'pull_request'
+        run: |
+          node .github/scripts/commit-snapshots.js
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          GITHUB_REF: ${{ github.ref }}
+          GIT_USER_NAME: ${{ github.actor }}
+          GIT_USER_EMAIL: ${{ github.actor }}@users.noreply.github.com

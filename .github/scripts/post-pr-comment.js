@@ -3,8 +3,15 @@ const runId = process.env.GITHUB_RUN_ID;
 const repository = process.env.GITHUB_REPOSITORY;
 const prNumber = process.env.PR_NUMBER;
 
-if (!token || !runId || !repository || !prNumber) {
-  console.error('Missing required environment variables.');
+const missingVars = [];
+if (!token) missingVars.push('PAT_TOKEN');
+if (!runId) missingVars.push('GITHUB_RUN_ID');
+if (!repository) missingVars.push('GITHUB_REPOSITORY');
+if (!prNumber) missingVars.push('PR_NUMBER');
+
+if (missingVars.length > 0) {
+  console.error(`Missing required environment variables: ${missingVars.join(', ')}`);
+  console.error('Ensure the reusable workflow passes PAT_TOKEN and the step sets the GitHub run and PR context variables.');
   process.exit(1);
 }
 
