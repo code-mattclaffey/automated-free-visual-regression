@@ -17,3 +17,5 @@ concurrency:
 jobs:
   storybook-visual-chromium:
     uses: ./.github/workflows/playwright.yml
+    secrets:
+      PAT_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
